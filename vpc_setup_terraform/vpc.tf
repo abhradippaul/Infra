@@ -1,12 +1,21 @@
-resource "aws_vpc" "terra-demo-vpc-1" {
+resource "aws_vpc" "demo-vpc" {
   cidr_block = "10.1.0.0/16"
 }
 
-resource "aws_subnet" "terra-demo-subnet-1" {
-  vpc_id     = aws_vpc.terra-demo-vpc-1.id
+resource "aws_subnet" "demo-private-subnet-1a" {
+  vpc_id     = aws_vpc.demo-vpc.id
   cidr_block = "10.1.1.0/24"
 
   tags = {
-    Name = "terra-demo-subnet-1"
+    Name = "demo-private-subnet-1a"
+  }
+}
+
+resource "aws_subnet" "demo-private-subnet-1b" {
+  vpc_id     = aws_vpc.demo-vpc.id
+  cidr_block = "10.1.2.0/24"
+
+  tags = {
+    Name = "demo-private-subnet-1b"
   }
 }
