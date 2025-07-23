@@ -158,7 +158,7 @@ resource "aws_network_acl" "demo-network-acl-private" {
   }
 
   tags = {
-    Name = "demo-network-acl-public"
+    Name = "demo-network-acl-private"
   }
 }
 
