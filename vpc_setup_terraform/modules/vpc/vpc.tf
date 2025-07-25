@@ -20,17 +20,17 @@ resource "aws_internet_gateway" "demo-gateway" {
 
 resource "aws_route_table" "demo-private-route-table" {
   vpc_id     = aws_vpc.demo-vpc.id
-  depends_on = [aws_nat_gateway.nat_private_ec2]
+  # depends_on = [aws_nat_gateway.nat_private_ec2]
 
   route {
     cidr_block = var.vpc_cidr
     gateway_id = "local"
   }
 
-  route {
-    cidr_block = "0.0.0.0/0"
-    gateway_id = aws_nat_gateway.nat_private_ec2.id
-  }
+  # route {
+  #   cidr_block = "0.0.0.0/0"
+  #   gateway_id = aws_nat_gateway.nat_private_ec2.id
+  # }
 
   tags = {
     Name = "demo-private-route-table"
@@ -95,20 +95,20 @@ resource "aws_route_table_association" "private_subnet_assign" {
   route_table_id = aws_route_table.demo-private-route-table.id
 }
 
-resource "aws_eip" "nat_elastic_ip" {
-  tags = {
-    "Name" = "nat_elastic_ip"
-  }
-}
+# resource "aws_eip" "nat_elastic_ip" {
+#   tags = {
+#     "Name" = "nat_elastic_ip"
+#   }
+# }
 
-resource "aws_nat_gateway" "nat_private_ec2" {
-  depends_on = [ aws_eip.nat_elastic_ip ]
-  allocation_id = aws_eip.nat_elastic_ip.id
-  subnet_id     = aws_subnet.demo-subnet-public[0].id
-  tags = {
-    "Name" = "nat_private_ec2"
-  }
-}
+# resource "aws_nat_gateway" "nat_private_ec2" {
+#   depends_on = [ aws_eip.nat_elastic_ip ]
+#   allocation_id = aws_eip.nat_elastic_ip.id
+#   subnet_id     = aws_subnet.demo-subnet-public[0].id
+#   tags = {
+#     "Name" = "nat_private_ec2"
+#   }
+# }
 
 resource "aws_network_acl" "demo-network-acl-public" {
   vpc_id = aws_vpc.demo-vpc.id
