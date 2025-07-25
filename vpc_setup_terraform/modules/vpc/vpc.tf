@@ -157,6 +157,15 @@ resource "aws_network_acl" "demo-network-acl-private" {
     to_port    = 80
   }
 
+  ingress {
+    protocol   = "tcp"
+    rule_no    = 99
+    action     = "allow"
+    cidr_block = var.vpc_cidr
+    from_port  = 22
+    to_port    = 22
+  }
+
   tags = {
     Name = "demo-network-acl-private"
   }
