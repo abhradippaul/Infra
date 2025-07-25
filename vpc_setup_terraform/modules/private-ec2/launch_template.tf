@@ -15,9 +15,9 @@ resource "aws_security_group" "private_ec2_security_group" {
     from_port = 22
     to_port   = 22
     protocol  = "tcp"
-    # security_groups = [var.bastion_security_group]
-    cidr_blocks      = ["0.0.0.0/0"]
-    ipv6_cidr_blocks = ["::/0"]
+    security_groups = [var.bastion_security_group]
+    # cidr_blocks      = ["0.0.0.0/0"]
+    # ipv6_cidr_blocks = ["::/0"]
   }
 
   ingress {
@@ -25,8 +25,6 @@ resource "aws_security_group" "private_ec2_security_group" {
     to_port         = 80
     protocol        = "tcp"
     security_groups = [var.alb_security_group]
-    # cidr_blocks      = ["0.0.0.0/0"]
-    # ipv6_cidr_blocks = ["::/0"]
   }
 
   egress {
@@ -46,33 +44,14 @@ resource "aws_launch_template" "private_ec2_template" {
   image_id               = var.private_ec2_ami
   update_default_version = true
 
-  # block_device_mappings {
-  #   device_name = "/dev/sdf"
-
-  #   ebs {
-  #     volume_size           = var.private_ec2_storage
-  #     volume_type           = "gp3"
-  #     delete_on_termination = true
-  #   }
-  # }
-
-
-
-  #   tag_specifications {
-
-  #     tags = {
-  #       Name = "test"
-  #     }
-  #   }
-
   user_data = filebase64("./script.sh")
 }
 
 
 resource "aws_autoscaling_group" "private_ec2_autoscaling" {
-  desired_capacity    = 0
-  max_size            = 0
-  min_size            = 0
+  desired_capacity    = 2
+  max_size            = 2
+  min_size            = 2
   vpc_zone_identifier = var.private_ec2_subnets
   target_group_arns   = [var.alb_target_group_arn]
 

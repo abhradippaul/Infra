@@ -20,14 +20,14 @@ resource "aws_security_group" "alb_webserver_security_group" {
   }
 }
 
-# resource "aws_lb" "alb_private_ec2" {
-#   #   name               = "alb_private_ec2"
-#   internal           = false
-#   load_balancer_type = "application"
-#   security_groups    = [aws_security_group.alb_webserver_security_group.id]
-#   subnets            = var.public_subnet
-#   depends_on         = [aws_security_group.alb_webserver_security_group]
-# }
+resource "aws_lb" "alb_private_ec2" {
+  #   name               = "alb_private_ec2"
+  internal           = false
+  load_balancer_type = "application"
+  security_groups    = [aws_security_group.alb_webserver_security_group.id]
+  subnets            = var.public_subnet
+  depends_on         = [aws_security_group.alb_webserver_security_group]
+}
 
 resource "aws_lb_target_group" "alb_private_ec2_target_group" {
   #   name = "alb_private_ec2_target_group"
@@ -44,14 +44,14 @@ resource "aws_lb_target_group" "alb_private_ec2_target_group" {
   }
 }
 
-# resource "aws_lb_listener" "alb_listener_private_ec2" {
-#   load_balancer_arn = aws_lb.alb_private_ec2.arn
-#   port              = "80"
-#   protocol          = "HTTP"
+resource "aws_lb_listener" "alb_listener_private_ec2" {
+  load_balancer_arn = aws_lb.alb_private_ec2.arn
+  port              = "80"
+  protocol          = "HTTP"
 
-#   default_action {
-#     type             = "forward"
-#     target_group_arn = aws_lb_target_group.alb_private_ec2_target_group.arn
-#   }
-#   depends_on = [aws_lb.alb_private_ec2]
-# }
+  default_action {
+    type             = "forward"
+    target_group_arn = aws_lb_target_group.alb_private_ec2_target_group.arn
+  }
+  depends_on = [aws_lb.alb_private_ec2]
+}

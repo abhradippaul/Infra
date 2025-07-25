@@ -19,17 +19,18 @@ resource "aws_internet_gateway" "demo-gateway" {
 }
 
 resource "aws_route_table" "demo-private-route-table" {
-  vpc_id = aws_vpc.demo-vpc.id
+  vpc_id     = aws_vpc.demo-vpc.id
+  depends_on = [aws_nat_gateway.nat_private_ec2]
 
   route {
     cidr_block = var.vpc_cidr
     gateway_id = "local"
   }
 
-  # route {
-  #   cidr_block = "0.0.0.0/0"
-  #   gateway_id = aws_nat_gateway.demo-nat.id
-  # }
+  route {
+    cidr_block = "0.0.0.0/0"
+    gateway_id = aws_nat_gateway.nat_private_ec2.id
+  }
 
   tags = {
     Name = "demo-private-route-table"
@@ -94,24 +95,23 @@ resource "aws_route_table_association" "private_subnet_assign" {
   route_table_id = aws_route_table.demo-private-route-table.id
 }
 
-# # resource "aws_eip" "demo-elastic-ip" {
+resource "aws_eip" "nat_elastic_ip" {
+  tags = {
+    "Name" = "nat_elastic_ip"
+  }
+}
 
-# #   tags = {
-# #     "Name" = "demo-elastic-ip"
-# #   }
-# # }
-
-# # resource "aws_nat_gateway" "demo-nat" {
-# #   allocation_id = aws_eip.demo-elastic-ip.id
-# #   subnet_id = aws_subnet.demo-subnet-public.id
-# #   tags = {
-# #     "Name" = "demo-nat"
-# #   }
-# # }
+resource "aws_nat_gateway" "nat_private_ec2" {
+  depends_on = [ aws_eip.nat_elastic_ip ]
+  allocation_id = aws_eip.nat_elastic_ip.id
+  subnet_id     = aws_subnet.demo-subnet-public[0].id
+  tags = {
+    "Name" = "nat_private_ec2"
+  }
+}
 
 resource "aws_network_acl" "demo-network-acl-public" {
   vpc_id = aws_vpc.demo-vpc.id
-  #   subnet_ids = [aws_subnet.demo-subnet-public[0].id, aws_subnet.demo-subnet-public[1].id]
 
   egress {
     protocol   = -1
@@ -137,7 +137,6 @@ resource "aws_network_acl" "demo-network-acl-public" {
 }
 resource "aws_network_acl" "demo-network-acl-private" {
   vpc_id = aws_vpc.demo-vpc.id
-  #   subnet_ids = [aws_subnet.demo-subnet-private[0].id, aws_subnet.demo-subnet-private[1].id]
 
   egress {
     protocol   = -1
@@ -149,21 +148,12 @@ resource "aws_network_acl" "demo-network-acl-private" {
   }
 
   ingress {
-    protocol   = "tcp"
+    protocol   = -1
     rule_no    = 100
     action     = "allow"
-    cidr_block = var.vpc_cidr
-    from_port  = 80
-    to_port    = 80
-  }
-
-  ingress {
-    protocol   = "tcp"
-    rule_no    = 99
-    action     = "allow"
-    cidr_block = var.vpc_cidr
-    from_port  = 22
-    to_port    = 22
+    cidr_block = "0.0.0.0/0"
+    from_port  = 0
+    to_port    = 0
   }
 
   tags = {
