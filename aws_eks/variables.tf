@@ -13,3 +13,13 @@ variable "public_subnets" {
 variable "private_subnets" {
   type = list(string)
 }
+
+variable "eks_name" {
+  type = string
+  default = "demo-eks"
+}
+
+variable "eks_node" {
+  type = string
+  default = "t3.medium"
+}
