@@ -1,12 +1,12 @@
 locals {
   vpc_info         = "${var.vpc_cidr}-${var.vpc_name}"
-  internet_gateway = "demo-gateway${var.vpc_name}"
+  internet_gateway = "demo-gateway-${var.vpc_name}"
 }
 
 resource "aws_vpc" "demo-vpc" {
   cidr_block = var.vpc_cidr
   tags = {
-    "Name" = var.vpc_name
+    Name = var.vpc_name
   }
 }
 
@@ -15,6 +15,35 @@ resource "aws_internet_gateway" "demo-gateway" {
 
   tags = {
     Name = local.internet_gateway
+  }
+}
+
+resource "aws_subnet" "demo-subnet-public" {
+  vpc_id                  = aws_vpc.demo-vpc.id
+  count                   = length(var.public_subnet_cidrs)
+  cidr_block              = var.public_subnet_cidrs[count.index]
+  availability_zone       = var.az_zones[count.index]
+  map_public_ip_on_launch = true
+
+
+  tags = {
+    Name     = "demo-subnet-public-${count.index + 1}"
+    Vpc_info = local.vpc_info
+  }
+}
+
+resource "aws_eip" "nat_elastic_ip" {
+  tags = {
+    Name = "nat_elastic_ip"
+  }
+}
+
+resource "aws_nat_gateway" "nat_private_ec2" {
+  depends_on    = [aws_eip.nat_elastic_ip]
+  allocation_id = aws_eip.nat_elastic_ip.id
+  subnet_id     = aws_subnet.demo-subnet-public[0].id
+  tags = {
+    Name = "nat_private_ec2"
   }
 }
 
@@ -56,20 +85,6 @@ resource "aws_route_table" "demo-public-route-table" {
   }
 }
 
-resource "aws_subnet" "demo-subnet-public" {
-  vpc_id                  = aws_vpc.demo-vpc.id
-  count                   = length(var.public_subnet_cidrs)
-  cidr_block              = var.public_subnet_cidrs[count.index]
-  availability_zone       = var.az_zones[count.index]
-  map_public_ip_on_launch = true
-
-
-  tags = {
-    Name     = "demo-subnet-public-${count.index + 1}"
-    Vpc_info = local.vpc_info
-  }
-}
-
 resource "aws_subnet" "demo-subnet-private" {
   vpc_id                  = aws_vpc.demo-vpc.id
   count                   = length(var.private_subnet_cidrs)
@@ -93,21 +108,6 @@ resource "aws_route_table_association" "private_subnet_assign" {
   count          = length(var.private_subnet_cidrs)
   subnet_id      = aws_subnet.demo-subnet-private[count.index].id
   route_table_id = aws_route_table.demo-private-route-table.id
-}
-
-resource "aws_eip" "nat_elastic_ip" {
-  tags = {
-    "Name" = "nat_elastic_ip"
-  }
-}
-
-resource "aws_nat_gateway" "nat_private_ec2" {
-  depends_on = [ aws_eip.nat_elastic_ip ]
-  allocation_id = aws_eip.nat_elastic_ip.id
-  subnet_id     = aws_subnet.demo-subnet-public[0].id
-  tags = {
-    "Name" = "nat_private_ec2"
-  }
 }
 
 resource "aws_network_acl" "demo-network-acl-public" {

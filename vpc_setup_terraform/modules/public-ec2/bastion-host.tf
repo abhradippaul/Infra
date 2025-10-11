@@ -1,7 +1,7 @@
 resource "aws_key_pair" "aws_key_pair" {
   public_key = file("./id_ed25519.pub")
   tags = {
-    "Name" = "bastion-key"
+    Name = "bastion-key"
   }
 }
 
@@ -40,6 +40,6 @@ resource "aws_instance" "bastion-host" {
   }
 
   tags = {
-    "Name" = var.bastion_name
+    Name = var.bastion_name
   }
 }

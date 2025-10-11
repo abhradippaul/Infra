@@ -18,4 +18,4 @@ for_each will not work with list because it has duplicate value.
 Lifecycle -> Create before destory, Prevent destroy, Ignore changes, Replace triggered by, Custom condition
 Terraform dynamic expression
 
-Terraform Function -> max, min, trim, chomp, reverse, lower, replace, merge, substr
+Terraform Function -> max, min, trim, chomp, reverse, lower, replace, merge, substr, split, join,

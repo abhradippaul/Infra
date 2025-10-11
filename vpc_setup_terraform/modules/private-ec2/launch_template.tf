@@ -12,9 +12,9 @@ resource "aws_security_group" "private_ec2_security_group" {
   depends_on  = [var.bastion_security_group, var.alb_security_group]
 
   ingress {
-    from_port = 22
-    to_port   = 22
-    protocol  = "tcp"
+    from_port       = 22
+    to_port         = 22
+    protocol        = "tcp"
     security_groups = [var.bastion_security_group]
     # cidr_blocks      = ["0.0.0.0/0"]
     # ipv6_cidr_blocks = ["::/0"]
@@ -49,9 +49,9 @@ resource "aws_launch_template" "private_ec2_template" {
 
 
 resource "aws_autoscaling_group" "private_ec2_autoscaling" {
-  desired_capacity    = 2
+  desired_capacity    = 1
   max_size            = 2
-  min_size            = 2
+  min_size            = 1
   vpc_zone_identifier = var.private_ec2_subnets
   target_group_arns   = [var.alb_target_group_arn]
 
