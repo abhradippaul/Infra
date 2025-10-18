@@ -1,0 +1,8 @@
+---
+- name: Ping the servers
+  hosts: all
+  tasks:
+    - name: Ping to all managed nodes
+      ping: 
+      remote_user: paul
+...

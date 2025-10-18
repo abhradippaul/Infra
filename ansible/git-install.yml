@@ -1,0 +1,10 @@
+---
+- name: Git installation
+  become: true
+  hosts: all
+  tasks:
+  - name: git install
+    apt:
+      name: git
+      state: latest
+...
