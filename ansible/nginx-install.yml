@@ -1,11 +1,22 @@
 ---
 - name: Nginx install
   become: true
+  vars:
+    name: nginx
   hosts: all
   tasks:  
   - name: nginx install
     apt:
-      name: nginx
+      name: "{{name}}"
       state: absent 
+  - name: copy index.html
+    copy:
+      src: index.html
+      dest: /var/www/html/index.html
+  - name: restart nginx service
+    systemd:
+      state: restarted
+      name: "{{name}}"
+    tags: [restart]
 # latest
 ...
