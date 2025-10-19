@@ -1,0 +1,44 @@
+Oct 19 10:12:04 server1 kernel: Linux version 5.14.0-427.el9.x86_64 (gcc 11.3.1) #1 SMP Fri Sep 6 10:12:44 UTC 2024
+Oct 19 10:12:04 server1 systemd[1]: Starting udev Kernel Device Manager...
+Oct 19 10:12:04 server1 systemd[1]: Started udev Kernel Device Manager.
+Oct 19 10:12:05 server1 kernel: x86/cpu: SGX disabled by BIOS.
+Oct 19 10:12:06 server1 kernel: audit: type=1130 audit(1729317726.258:1): pid=1 uid=0 msg='unit=systemd-journald comm="systemd" exe="/usr/lib/systemd/systemd" res=success'
+Oct 19 10:12:08 server1 NetworkManager[782]: <info>  [1697709128.7321] device (eth0): state change: ip-config -> activated
+Oct 19 10:12:08 server1 systemd[1]: Started Network Manager.
+Oct 19 10:12:10 server1 sshd[1054]: Server listening on 0.0.0.0 port 22.
+Oct 19 10:13:41 server1 sshd[1278]: Accepted password for root from 192.168.1.25 port 45872 ssh2
+Oct 19 10:13:41 server1 sshd[1278]: pam_unix(sshd:session): session opened for user root(uid=0) by (uid=0)
+Oct 19 10:14:01 server1 CRON[1324]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+
+Oct 19 10:15:10 server1 kernel: EXT4-fs warning (device sda1): ext4_end_bio:345: I/O error -5 writing to inode 123456 (offset 0 size 4096)
+Oct 19 10:15:10 server1 kernel: Buffer I/O error on dev sda1, logical block 51234, lost async page write
+Oct 19 10:15:10 server1 systemd[1]: systemd-journald.service: Failed to write entry (30 items, 1016 bytes), ignoring: Input/output error
+
+Oct 19 10:15:33 server1 kernel: eth0: link up, 1000 Mbps, full-duplex
+Oct 19 10:16:04 server1 systemd[1]: Starting Cleanup of Temporary Directories...
+Oct 19 10:16:04 server1 systemd[1]: Finished Cleanup of Temporary Directories.
+
+Oct 19 10:16:50 server1 sshd[1442]: Failed password for invalid user admin from 203.0.113.45 port 55214 ssh2
+Oct 19 10:16:52 server1 sshd[1442]: Failed password for invalid user test from 203.0.113.45 port 55216 ssh2
+Oct 19 10:16:54 server1 sshd[1442]: Received disconnect from 203.0.113.45 port 55214:11: Bye Bye [preauth]
+Oct 19 10:16:54 server1 sshd[1442]: PAM 2 more authentication failures; logname= uid=0 euid=0 tty=ssh ruser= rhost=203.0.113.45
+
+Oct 19 10:17:10 server1 systemd[1]: httpd.service: Main process exited, code=exited, status=1/FAILURE
+Oct 19 10:17:10 server1 systemd[1]: httpd.service: Failed with result 'exit-code'.
+Oct 19 10:17:10 server1 systemd[1]: Failed to start Apache Web Server.
+Oct 19 10:17:10 server1 kernel: audit: type=1130 audit(1729317830.569:34): pid=1 uid=0 msg='unit=httpd comm="systemd" exe="/usr/lib/systemd/systemd" res=failed'
+
+Oct 19 10:18:03 server1 kernel: memory: usage 95% (8192MB/8600MB)
+Oct 19 10:18:03 server1 kernel: Out of memory: Killed process 1654 (node) total-vm:2123456kB, anon-rss:1023456kB, file-rss:0kB, shmem-rss:0kB, UID:1000
+Oct 19 10:18:03 server1 systemd[1]: node-app.service: Main process exited, code=killed, status=9/KILL
+Oct 19 10:18:03 server1 systemd[1]: node-app.service: Failed with result 'oom-kill'.
+
+Oct 19 10:19:20 server1 kernel: [Hardware Error]: CPU 3: Machine Check Exception: 0 Bank 5: b200000000070005
+Oct 19 10:19:20 server1 kernel: [Hardware Error]: TSC 0 ADDR fef13a40 MISC 3880000086
+Oct 19 10:19:20 server1 kernel: mce: CPU3: Core temperature above threshold, cpu clock throttled (total events = 1)
+
+Oct 19 10:20:01 server1 CRON[1523]: (root) CMD (/usr/lib64/sa/sa1 1 1)
+Oct 19 10:22:47 server1 systemd[1]: Stopped OpenSSH server daemon.
+Oct 19 10:22:47 server1 systemd[1]: httpd.service: Scheduled restart job, restart counter is at 1.
+Oct 19 10:22:47 server1 systemd[1]: Started Apache Web Server.
+Oct 19 10:22:48 server1 httpd[1923]: AH00163: Apache/2.4.58 (Red Hat) configured -- resuming normal operations
