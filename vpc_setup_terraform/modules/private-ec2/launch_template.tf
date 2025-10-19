@@ -49,9 +49,9 @@ resource "aws_launch_template" "private_ec2_template" {
 
 
 resource "aws_autoscaling_group" "private_ec2_autoscaling" {
-  desired_capacity    = 1
+  desired_capacity    = 2
   max_size            = 2
-  min_size            = 1
+  min_size            = 2
   vpc_zone_identifier = var.private_ec2_subnets
   target_group_arns   = [var.alb_target_group_arn]
 

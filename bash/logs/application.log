@@ -1,0 +1,34 @@
+2025-10-19 10:12:01 [INFO]  Server starting on port 8000...
+2025-10-19 10:12:02 [INFO]  Connected to PostgreSQL database (host=db01, user=app_user)
+2025-10-19 10:12:03 [INFO]  Loaded 12 configuration files successfully.
+2025-10-19 10:12:04 [SUCCESS] Application initialized successfully in 2.3 seconds.
+
+2025-10-19 10:13:10 [INFO]  User login request received (username=john.doe)
+2025-10-19 10:13:10 [SUCCESS] Authentication successful (user_id=1023, role=admin)
+2025-10-19 10:13:11 [INFO]  Token generated for session: 1b3d-883a-22a1-cc89
+
+2025-10-19 10:14:02 [INFO]  API Request: GET /api/products?page=1
+2025-10-19 10:14:02 [SUCCESS] Response 200 OK (products=25, time=142ms)
+
+2025-10-19 10:15:45 [WARNING] Slow database query detected (query_time=4.8s, endpoint=/api/orders)
+2025-10-19 10:15:46 [INFO]  Cache miss for key: user_1023_orders
+2025-10-19 10:15:46 [SUCCESS] Cached response stored (TTL=300s)
+
+2025-10-19 10:16:20 [ERROR]  Payment processing failed (user_id=1023, order_id=8812, reason="Invalid card token")
+2025-10-19 10:16:20 [INFO]  Transaction rolled back successfully for order_id=8812
+
+2025-10-19 10:17:05 [INFO]  API Request: POST /api/upload
+2025-10-19 10:17:06 [FAILED] File upload failed (user_id=2045, size=15MB, error="Timeout exceeded 30s")
+
+2025-10-19 10:18:12 [INFO]  Scheduled job started: cleanup-temp-files
+2025-10-19 10:18:12 [SUCCESS] Job completed successfully in 4.2s
+
+2025-10-19 10:19:50 [CRITICAL] Unhandled exception in worker thread
+2025-10-19 10:19:50 [CRITICAL] Traceback (most recent call last):
+2025-10-19 10:19:50 [CRITICAL]   File "/app/service/worker.py", line 82, in process_job
+2025-10-19 10:19:50 [CRITICAL]     result = data['task'].execute()
+2025-10-19 10:19:50 [CRITICAL] KeyError: 'task'
+2025-10-19 10:19:51 [INFO]  Worker restarted automatically (pid=1342)
+
+2025-10-19 10:20:30 [INFO]  Health check: all services operational.
+2025-10-19 10:20:30 [SUCCESS] System running stable for 8 minutes.
