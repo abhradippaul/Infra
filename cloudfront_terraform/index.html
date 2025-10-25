@@ -1,0 +1,105 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Welcome to my static website!" />
+  <title>My Static Website</title>
+  <link rel="stylesheet" href="style.css" />
+  <style>
+    /* Basic styling */
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      padding: 0;
+      color: #333;
+      background-color: #f9f9f9;
+    }
+
+    header {
+      background-color: #0078d7;
+      color: white;
+      padding: 1.5rem 0;
+      text-align: center;
+    }
+
+    nav ul {
+      list-style: none;
+      padding: 0;
+      margin: 0;
+      display: flex;
+      justify-content: center;
+      gap: 1.5rem;
+    }
+
+    nav ul li a {
+      color: white;
+      text-decoration: none;
+      font-weight: 500;
+    }
+
+    nav ul li a:hover {
+      text-decoration: underline;
+    }
+
+    section {
+      padding: 3rem 1rem;
+      text-align: center;
+    }
+
+    footer {
+      background-color: #222;
+      color: #ccc;
+      text-align: center;
+      padding: 1rem 0;
+    }
+
+    .btn {
+      background-color: #0078d7;
+      color: white;
+      padding: 0.7rem 1.2rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      margin-top: 1rem;
+    }
+
+    .btn:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+
+<body>
+  <header>
+    <h1>Welcome to My Static Website</h1>
+    <nav>
+      <ul>
+        <li><a href="#home">Home</a></li>
+        <li><a href="#about">About</a></li>
+        <li><a href="#contact">Contact</a></li>
+      </ul>
+    </nav>
+  </header>
+
+  <section id="home">
+    <h2>Home</h2>
+    <p>This is a simple static website built using just HTML and CSS.</p>
+    <button class="btn">Learn More</button>
+  </section>
+
+  <section id="about">
+    <h2>About</h2>
+    <p>We provide high-quality content and web experiences for everyone. This template is lightweight and fully customizable.</p>
+  </section>
+
+  <section id="contact">
+    <h2>Contact</h2>
+    <p>Email us at: <a href="mailto:abhradippaul@gmail.com">abhradippaul@gmail.com</a></p>
+  </section>
+
+  <footer>
+    <p>&copy; 2025 My Static Website. All rights reserved.</p>
+  </footer>
+</body>
+</html>
