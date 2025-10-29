@@ -1,5 +1,5 @@
 output "cloudfront_url" {
-  value = aws_cloudfront_distribution.s3_distribution.domain_name
+  value = module.cloudfront.cloudfront_domain_name
 }
 
 # output "iam_json" {

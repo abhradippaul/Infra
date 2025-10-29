@@ -1,0 +1,130 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Error — Something went wrong</title>
+  <meta name="description" content="Friendly, responsive HTML error page (supports ?code=404&message=Not%20Found)">
+  <style>
+    :root{
+      --bg:#0f1724; --card:#0b1220; --muted:#9aa6b2; --accent:#7dd3fc; --glass: rgba(255,255,255,0.03);
+      color-scheme: dark;
+      font-family: Inter, ui-sans-serif, system-ui, -apple-system, "Segoe UI", Roboto, "Helvetica Neue", Arial;
+    }
+    *{box-sizing:border-box}
+    html,body{height:100%}
+    body{
+      margin:0; background: radial-gradient(1200px 600px at 10% 20%, rgba(125,211,252,0.06), transparent),
+                 radial-gradient(900px 400px at 90% 80%, rgba(139,92,246,0.04), transparent),
+                 var(--bg); color:#e6eef6; -webkit-font-smoothing:antialiased; -moz-osx-font-smoothing:grayscale;
+      display:flex; align-items:center; justify-content:center; padding:32px;
+    }
+    .card{
+      width:100%; max-width:980px; background:linear-gradient(180deg,var(--card), rgba(8,12,18,0.6));
+      border-radius:18px; padding:36px; box-shadow:0 10px 30px rgba(2,6,23,0.6); display:grid; grid-template-columns:1fr 360px; gap:32px; align-items:center;
+      backdrop-filter: blur(6px);
+    }
+    @media (max-width:880px){.card{grid-template-columns:1fr; padding:24px}}
+
+    .left h1{font-size:48px; margin:0 0 8px; letter-spacing:-1px}
+    @media (max-width:480px){.left h1{font-size:34px}}
+    .code{display:inline-block; background:var(--glass); padding:8px 12px; border-radius:10px; color:var(--accent); font-weight:700; margin-bottom:12px}
+    .desc{color:var(--muted); margin:0 0 20px; line-height:1.5}
+
+    .actions{display:flex; gap:12px; flex-wrap:wrap}
+    .btn{display:inline-flex; align-items:center; gap:10px; border:0; padding:12px 16px; border-radius:10px; cursor:pointer; font-weight:600; text-decoration:none}
+    .btn-primary{background:linear-gradient(90deg,var(--accent), #60a5fa); color:#06202a}
+    .btn-ghost{background:transparent; color:var(--muted); border:1px solid rgba(255,255,255,0.04)}
+
+    .right{display:flex; align-items:center; justify-content:center; position:relative}
+    .illustration{width:100%; max-width:320px}
+
+    .tiny{font-size:13px; color:var(--muted); margin-top:14px}
+
+    footer{display:flex; gap:12px; margin-top:18px; align-items:center}
+    a.small{color:var(--muted); text-decoration:none; font-size:13px}
+
+    /* subtle animation */
+    .planet{animation:float 6s ease-in-out infinite}
+    @keyframes float{0%{transform:translateY(0)}50%{transform:translateY(-10px)}100%{transform:translateY(0)}}
+  </style>
+</head>
+<body>
+  <main class="card" role="main" aria-labelledby="error-title">
+    <section class="left">
+      <div class="code" id="error-code">Error</div>
+      <h1 id="error-title">Something's gone wrong.</h1>
+      <p class="desc" id="error-message">We hit a snag while trying to load this page. Try refreshing or head back to safety.</p>
+
+      <div class="actions">
+        <a class="btn btn-primary" href="/" id="home-btn" rel="noopener">🏠 Go home</a>
+        <button class="btn btn-ghost" id="retry-btn">🔁 Retry</button>
+        <a class="btn btn-ghost" href="mailto:support@example.com" id="contact-btn">✉️ Contact support</a>
+      </div>
+
+      <div class="tiny">Tip: This page supports query params so you can preview it — <code>?code=404&message=Not%20Found</code>.</div>
+
+      <footer>
+        <a class="small" href="#">Status</a>
+        <a class="small" href="#">Docs</a>
+        <a class="small" href="#">Privacy</a>
+      </footer>
+    </section>
+
+    <aside class="right" aria-hidden="true">
+      <!-- simple SVG illustration that scales well -->
+      <svg class="illustration" viewBox="0 0 600 600" xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <linearGradient id="g1" x1="0" x2="1">
+            <stop offset="0" stop-color="#7dd3fc" stop-opacity="0.95"/>
+            <stop offset="1" stop-color="#8b5cf6" stop-opacity="0.95"/>
+          </linearGradient>
+        </defs>
+        <g transform="translate(120,60)">
+          <circle cx="200" cy="200" r="160" fill="url(#g1)" opacity="0.12"/>
+          <g class="planet" transform="translate(140,130)">
+            <ellipse rx="120" ry="48" fill="#071426" opacity="0.15"/>
+            <circle cx="0" cy="0" r="96" fill="#0b1220" stroke="rgba(255,255,255,0.04)"/>
+            <circle cx="-22" cy="-10" r="8" fill="#7dd3fc"/>
+            <circle cx="36" cy="24" r="6" fill="#8b5cf6"/>
+          </g>
+          <g transform="translate(20,320) scale(0.7)">
+            <rect x="0" y="0" width="220" height="120" rx="14" fill="rgba(255,255,255,0.02)" stroke="rgba(255,255,255,0.03)"/>
+            <circle cx="40" cy="46" r="12" fill="#7dd3fc"/>
+            <rect x="70" y="28" width="110" height="18" rx="6" fill="rgba(255,255,255,0.03)"/>
+            <rect x="70" y="58" width="80" height="12" rx="6" fill="rgba(255,255,255,0.02)"/>
+          </g>
+        </g>
+      </svg>
+    </aside>
+  </main>
+
+  <script>
+    // Read query params to allow previewing: ?code=404&message=Not%20Found
+    (function(){
+      const params = new URLSearchParams(location.search);
+      const code = params.get('code');
+      const message = params.get('message');
+      const retryBtn = document.getElementById('retry-btn');
+
+      if(code){
+        document.getElementById('error-code').textContent = code;
+        document.getElementById('error-title').textContent = ({'404':'Page not found','500':'Server error'}[code] || 'Error');
+      }
+      if(message){
+        document.getElementById('error-message').textContent = decodeURIComponent(message);
+      }
+
+      retryBtn.addEventListener('click', function(){
+        // small visual affordance then reload
+        retryBtn.disabled = true;
+        retryBtn.textContent = '⏳ Retrying...';
+        setTimeout(function(){ location.reload(); }, 350);
+      });
+
+      // accessibility: focus primary action
+      document.getElementById('home-btn').focus();
+    })();
+  </script>
+</body>
+</html>
