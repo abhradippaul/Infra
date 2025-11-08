@@ -31,10 +31,9 @@ resource "aws_cloudfront_distribution" "distribution" {
     }
   }
 
-  enabled             = true
-  is_ipv6_enabled     = true
-  comment             = "Some comment"
-  default_root_object = "index.html"
+  enabled         = true
+  is_ipv6_enabled = true
+  comment         = "Some comment"
 
   default_cache_behavior {
     viewer_protocol_policy = "allow-all"
@@ -77,13 +76,6 @@ resource "aws_cloudfront_distribution" "distribution" {
     geo_restriction {
       restriction_type = "none"
     }
-  }
-
-  custom_error_response {
-    response_page_path    = "/website/error.html"
-    error_code            = 404
-    response_code         = 404
-    error_caching_min_ttl = 300
   }
 
   tags = {

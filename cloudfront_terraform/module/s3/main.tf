@@ -5,6 +5,8 @@ resource "aws_s3_bucket" "bucket" {
     Environment = "Dev"
   }
 
+  force_destroy = true
+
   lifecycle {
     ignore_changes = [tags]
   }
@@ -14,18 +16,6 @@ resource "aws_s3_bucket_versioning" "bucket_versioning" {
   bucket = aws_s3_bucket.bucket.id
   versioning_configuration {
     status = "Enabled"
-  }
-}
-
-resource "aws_s3_bucket_website_configuration" "s3_bucket_website" {
-  bucket = aws_s3_bucket.bucket.id
-
-  index_document {
-    suffix = "index.html"
-  }
-
-  error_document {
-    key = "error.html"
   }
 }
 
