@@ -33,6 +33,11 @@ resource "aws_iam_role_policy_attachment" "policy_attachment" {
   policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
 }
 
+resource "aws_iam_role_policy_attachment" "lambda_policy" {
+  role       = aws_iam_role.dynamodb_role.name
+  policy_arn = "arn:aws:iam::aws:policy/service-role/AWSLambdaBasicExecutionRole"
+}
+
 data "archive_file" "lambda_zip" {
   count       = length(var.lambda_filename)
   type        = "zip"

@@ -27,6 +27,7 @@ resource "aws_cognito_user_pool" "user_pool" {
 resource "aws_cognito_user_pool_client" "user_pool_client" {
   user_pool_id = aws_cognito_user_pool.user_pool.id
   name         = var.user_poo_client_name
+  # allowed_oauth_flows_user_pool_client = true
 
   explicit_auth_flows = ["ALLOW_USER_PASSWORD_AUTH"]
 }
