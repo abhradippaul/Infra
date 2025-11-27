@@ -1,6 +1,8 @@
 resource "aws_cognito_user_pool" "user_pool" {
-  name                = var.user_pool_name
-  username_attributes = ["email"]
+  name = var.user_pool_name
+
+  username_attributes      = ["email"]
+  auto_verified_attributes = ["email"]
 
   password_policy {
     minimum_length    = 6
@@ -9,8 +11,6 @@ resource "aws_cognito_user_pool" "user_pool" {
     require_numbers   = true
     require_symbols   = true
   }
-
-  auto_verified_attributes = ["email"]
 
   email_configuration {
     email_sending_account = "COGNITO_DEFAULT"
@@ -22,12 +22,17 @@ resource "aws_cognito_user_pool" "user_pool" {
     mutable             = true
     required            = true
   }
+
+  tags = {
+    Environment = var.env
+  }
 }
 
 resource "aws_cognito_user_pool_client" "user_pool_client" {
   user_pool_id = aws_cognito_user_pool.user_pool.id
-  name         = var.user_poo_client_name
-  # allowed_oauth_flows_user_pool_client = true
+  name         = "${aws_cognito_user_pool.user_pool.id}-client"
 
-  explicit_auth_flows = ["ALLOW_USER_PASSWORD_AUTH"]
+  explicit_auth_flows = [
+    "ALLOW_USER_PASSWORD_AUTH"
+  ]
 }

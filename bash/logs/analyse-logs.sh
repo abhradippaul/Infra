@@ -7,6 +7,8 @@ LOG_DIR="/mnt/c/Users/abhra/Desktop/Infra/bash/logs"
 # APP_LOG_FILE="application.log"
 # SYS_LOG_FILE="sys.log"
 REPORT_FILE="$LOG_DIR/log_analysis_report.txt"
+echo "analyzing log files" > "$REPORT_FILE"
+echo "================================" > "$REPORT_FILE"
 echo "analysing log files" > "$REPORT_FILE"
 
 ERROR_PATTERNS=("ERROR" "FATAL" "CRITICAL")
@@ -29,4 +31,5 @@ for LOG_FILE in $LOG_FILES; do
             echo "Action not required"
         fi
     done
+    echo "================================" > "$REPORT_FILE"
 done

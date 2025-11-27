@@ -11,7 +11,7 @@ resource "aws_cloudwatch_log_group" "cloudwathc_log_group" {
   }
 }
 
-data "aws_iam_policy_document" "dynamodb_assume_policy" {
+data "aws_iam_policy_document" "lambda_assume_policy" {
   statement {
     effect = "Allow"
     principals {
@@ -23,14 +23,36 @@ data "aws_iam_policy_document" "dynamodb_assume_policy" {
   }
 }
 
+data "aws_iam_policy_document" "dynamodb_policy_document" {
+  statement {
+    effect = "Allow"
+
+    actions = [
+      "dynamodb:PutItem",
+      "dynamodb:GetItem",
+      "dynamodb:UpdateItem",
+      "dynamodb:DeleteItem",
+      "dynamodb:Query",
+      "dynamodb:Scan"
+    ]
+
+    resources = [var.dynamodb_table_arn]
+  }
+}
+
 resource "aws_iam_role" "dynamodb_role" {
   name               = "dynamodb-fullaccess"
-  assume_role_policy = data.aws_iam_policy_document.dynamodb_assume_policy.json
+  assume_role_policy = data.aws_iam_policy_document.lambda_assume_policy.json
+}
+
+resource "aws_iam_policy" "dynamodb_policy" {
+  name   = "dynamodb_policy"
+  policy = data.aws_iam_policy_document.dynamodb_policy_document.json
 }
 
 resource "aws_iam_role_policy_attachment" "policy_attachment" {
   role       = aws_iam_role.dynamodb_role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonDynamoDBFullAccess"
+  policy_arn = aws_iam_policy.dynamodb_policy.arn
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_policy" {

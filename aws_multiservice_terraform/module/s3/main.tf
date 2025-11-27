@@ -12,17 +12,6 @@ resource "aws_s3_bucket" "bucket" {
   }
 }
 
-# resource "aws_s3_bucket_cors_configuration" "example" {
-#   bucket = aws_s3_bucket.bucket.id
-
-#   cors_rule {
-#     allowed_headers = ["*"]
-#     allowed_methods = ["PUT", "POST", "GET", "HEAD"]
-#     allowed_origins = ["*"]
-#     max_age_seconds = 3000
-#   }
-# }
-
 resource "aws_s3_bucket_public_access_block" "example" {
   bucket = aws_s3_bucket.bucket.id
 
@@ -32,35 +21,97 @@ resource "aws_s3_bucket_public_access_block" "example" {
   restrict_public_buckets = false
 }
 
-data "aws_iam_policy_document" "iam_allow_cloudfront_access" {
+# data "aws_iam_policy_document" "iam_allow_cloudfront_access" {
+#   statement {
+#     sid    = "AllowCloudFrontServicePrincipalReadWrite"
+#     effect = "Allow"
+
+#     principals {
+#       type        = "*"
+#       identifiers = ["*"]
+#     }
+
+#     actions = [
+#       "s3:GetObject",
+#       "s3:PutObject"
+#     ]
+
+#     resources = [
+#       "${aws_s3_bucket.bucket.arn}/*",
+#     ]
+#   }
+#   depends_on = [aws_s3_bucket.bucket]
+# }
+
+data "aws_iam_policy_document" "s3_bucket_policy" {
   statement {
-    sid    = "AllowCloudFrontServicePrincipalReadWrite"
-    effect = "Allow"
+    sid     = "PublicPutObject"
+    effect  = "Allow"
+    actions = ["s3:PutObject"]
 
     principals {
-      type        = "*"
+      type        = "AWS"
       identifiers = ["*"]
     }
 
-    actions = [
-      "s3:GetObject",
-      "s3:PutObject"
-    ]
-
     resources = [
-      "${aws_s3_bucket.bucket.arn}/*",
+      "arn:aws:s3:::${var.bucket_name}/*"
     ]
   }
-  depends_on = [aws_s3_bucket.bucket]
+
+  statement {
+    sid     = "GetOnlyThroughCloudFront"
+    effect  = "Allow"
+    actions = ["s3:GetObject"]
+
+    principals {
+      type        = "Service"
+      identifiers = ["cloudfront.amazonaws.com"]
+    }
+
+    resources = [
+      "arn:aws:s3:::${var.bucket_name}/*"
+    ]
+
+    condition {
+      test     = "StringEquals"
+      variable = "AWS:SourceArn"
+      values = [
+        var.cloudfront_arn
+      ]
+    }
+  }
+
+  statement {
+    sid     = "DenyInsecureGET"
+    effect  = "Deny"
+    actions = ["s3:GetObject"]
+
+    principals {
+      type        = "AWS"
+      identifiers = ["*"]
+    }
+
+    resources = [
+      "arn:aws:s3:::${var.bucket_name}/*"
+    ]
+
+    condition {
+      test     = "Bool"
+      variable = "aws:SecureTransport"
+      values   = ["false"]
+    }
+  }
 }
 
 resource "aws_s3_bucket_policy" "allow_public_access" {
   bucket = aws_s3_bucket.bucket.id
-  policy = data.aws_iam_policy_document.iam_allow_cloudfront_access.json
+  policy = data.aws_iam_policy_document.s3_bucket_policy.json
 }
 
 resource "aws_s3_object" "website" {
-  for_each = fileset("code/frontend", "**")
+  depends_on = [aws_s3_bucket_policy.allow_public_access]
+  for_each   = fileset("code/frontend", "**")
 
   bucket = aws_s3_bucket.bucket.id
   key    = each.value
