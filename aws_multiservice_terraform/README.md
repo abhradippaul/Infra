@@ -1,6 +1,8 @@
-# Serverless Dynamic Website on AWS
+# Serverless Dynamic Website on AWS with Terraform
 
 A fully serverless, scalable, and low-cost architecture for hosting a dynamic website using AWS services such as S3, CloudFront, Cognito, API Gateway, Lambda, and DynamoDB.
+
+<img width="1475" height="667" alt="diagram-export-28-11-2025-8_09_50-am" src="https://github.com/user-attachments/assets/529ea766-630a-4b48-b115-d5182d36a946" />
 
 ## Overview
 
