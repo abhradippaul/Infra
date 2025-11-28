@@ -1,16 +1,3 @@
-resource "aws_cloudwatch_log_group" "cloudwathc_log_group" {
-  name              = "/aws/lambda/${var.lambda_name}"
-  retention_in_days = 3
-
-  lifecycle {
-    ignore_changes = all
-  }
-
-  tags = {
-    Function = var.lambda_name
-  }
-}
-
 data "aws_iam_policy_document" "lambda_assume_policy" {
   statement {
     effect = "Allow"
@@ -96,6 +83,4 @@ resource "aws_lambda_function" "lambda_function" {
     Environment = var.env
     Application = "${var.lambda_name}-${var.lambda_filename[count.index]}"
   }
-
-  depends_on = [aws_cloudwatch_log_group.cloudwathc_log_group, data.archive_file.lambda_zip]
 }

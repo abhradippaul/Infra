@@ -1,10 +1,10 @@
-variable "cognito_user_pool_arn" {
+variable "env" {
   type = string
 }
 
-# variable "lambda_invoke_uri" {
-#   type = string
-# }
+variable "cognito_user_pool_arn" {
+  type = string
+}
 
 variable "lambda_invoke_arn_create_task" {
   type = string
@@ -35,5 +35,9 @@ variable "lambda_function_name_update_task" {
 }
 
 variable "lambda_function_name_delete_task" {
+  type = string
+}
+
+variable "stage_name" {
   type = string
 }

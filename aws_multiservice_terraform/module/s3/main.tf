@@ -21,28 +21,6 @@ resource "aws_s3_bucket_public_access_block" "example" {
   restrict_public_buckets = false
 }
 
-# data "aws_iam_policy_document" "iam_allow_cloudfront_access" {
-#   statement {
-#     sid    = "AllowCloudFrontServicePrincipalReadWrite"
-#     effect = "Allow"
-
-#     principals {
-#       type        = "*"
-#       identifiers = ["*"]
-#     }
-
-#     actions = [
-#       "s3:GetObject",
-#       "s3:PutObject"
-#     ]
-
-#     resources = [
-#       "${aws_s3_bucket.bucket.arn}/*",
-#     ]
-#   }
-#   depends_on = [aws_s3_bucket.bucket]
-# }
-
 data "aws_iam_policy_document" "s3_bucket_policy" {
   statement {
     sid     = "PublicPutObject"
@@ -125,18 +103,16 @@ resource "aws_s3_object" "website" {
       "js"   = "text/javascript",
       "png"  = "image/png",
       "jpg"  = "image/jpeg",
-      # Add other types as needed
     },
-    # Get the last element after splitting the key by '.'
+
     element(split(".", each.value), length(split(".", each.value)) - 1),
     "application/octet-stream"
   )
 
-  # Use filebase64sha256 for a more robust change detection mechanism
   etag = filebase64sha256("code/frontend/${each.value}")
 }
 
-resource "aws_s3_bucket_website_configuration" "example" {
+resource "aws_s3_bucket_website_configuration" "website_configuration" {
   bucket = aws_s3_bucket.bucket.id
 
   index_document {

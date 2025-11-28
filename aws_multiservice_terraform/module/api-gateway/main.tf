@@ -1,8 +1,10 @@
 resource "aws_api_gateway_rest_api" "s3_api_gateway" {
-  name        = "S3ApiGateway"
-  description = "This is my API for demonstration purposes"
+  name = "S3-Website-ApiGateway"
   endpoint_configuration {
     types = ["REGIONAL"]
+  }
+  tags = {
+    "Environment" = var.env
   }
 }
 
@@ -44,9 +46,10 @@ resource "aws_api_gateway_integration" "tasks_options_integration" {
   request_templates = {
     "application/json" = "{\"statusCode\": 200}"
   }
+  depends_on = [aws_api_gateway_method.tasks_options]
 }
 
-resource "aws_api_gateway_integration_response" "opt" {
+resource "aws_api_gateway_integration_response" "tasks_options_integration_response" {
   rest_api_id = aws_api_gateway_rest_api.s3_api_gateway.id
   resource_id = aws_api_gateway_rest_api.s3_api_gateway.root_resource_id
   http_method = aws_api_gateway_method.tasks_options.http_method
@@ -56,6 +59,7 @@ resource "aws_api_gateway_integration_response" "opt" {
     "method.response.header.Access-Control-Allow-Methods" = "'GET,OPTIONS'"
     "method.response.header.Access-Control-Allow-Origin"  = "'*'"
   }
+  depends_on = [aws_api_gateway_method_response.tasks_options_response]
 }
 
 resource "aws_api_gateway_method_response" "tasks_options_response" {
@@ -167,6 +171,7 @@ resource "aws_api_gateway_integration" "task_id_options_integration" {
   request_templates = {
     "application/json" = "{\"statusCode\": 200}"
   }
+  depends_on = [aws_api_gateway_method.task_id_options]
 }
 
 resource "aws_api_gateway_method_response" "task_id_options_response" {
@@ -180,6 +185,7 @@ resource "aws_api_gateway_method_response" "task_id_options_response" {
     "method.response.header.Access-Control-Allow-Methods" = true
     "method.response.header.Access-Control-Allow-Headers" = true
   }
+  depends_on = [aws_api_gateway_integration.task_id_options_integration]
 }
 
 resource "aws_api_gateway_integration_response" "task_id_options_integration_response" {
@@ -193,6 +199,7 @@ resource "aws_api_gateway_integration_response" "task_id_options_integration_res
     "method.response.header.Access-Control-Allow-Methods" = "'GET,POST,PUT,DELETE,OPTIONS'"
     "method.response.header.Access-Control-Allow-Headers" = "'Content-Type,Authorization'"
   }
+  depends_on = [aws_api_gateway_method_response.task_id_options_response]
 }
 
 resource "aws_api_gateway_deployment" "deployment" {
@@ -212,6 +219,15 @@ resource "aws_api_gateway_deployment" "deployment" {
 
       aws_api_gateway_method.delete_task_method,
       aws_api_gateway_integration.delete_task_method_integration,
+
+      aws_api_gateway_integration_response.task_id_options_integration_response,
+      aws_api_gateway_method_response.task_id_options_response,
+      aws_api_gateway_integration.task_id_options_integration,
+      aws_api_gateway_method.task_id_options,
+      aws_api_gateway_integration_response.tasks_options_integration_response,
+      aws_api_gateway_method_response.tasks_options_response,
+      aws_api_gateway_integration.tasks_options_integration,
+      aws_api_gateway_method.tasks_options
     ]))
   }
 
@@ -238,5 +254,5 @@ resource "aws_api_gateway_deployment" "deployment" {
 resource "aws_api_gateway_stage" "stage" {
   deployment_id = aws_api_gateway_deployment.deployment.id
   rest_api_id   = aws_api_gateway_rest_api.s3_api_gateway.id
-  stage_name    = "tasks"
+  stage_name    = var.stage_name
 }

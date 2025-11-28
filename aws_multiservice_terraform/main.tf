@@ -36,6 +36,8 @@ module "api_gateway" {
   lambda_function_name_delete_task = module.lambda.lambda_function_name_delete_task
   lambda_function_name_get_tasks   = module.lambda.lambda_function_name_get_tasks
   lambda_function_name_update_task = module.lambda.lambda_function_name_update_task
+  stage_name                       = "tasks"
+  env                              = var.env
 }
 
 module "cloudfront" {
