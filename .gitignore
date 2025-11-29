@@ -1,3 +1,5 @@
 .terraform
 .env
 *.pub
+node_modules
+*.zip
