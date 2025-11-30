@@ -2,25 +2,27 @@
 
 A fully serverless, scalable, and cost-efficient image transformation service using AWS CloudFront, Lambda, S3, and Terraform.
 
-This service allows you to transform images on the fly (resize, change format, optimize quality, etc.) using query parameters.
+This service allows you to transform images on the fly (resize, change format, optimise quality, etc.) using query parameters.
 Transformed images are cached in S3 and served globally through CloudFront for high performance.
+
+<img width="1455" height="666" alt="diagram-export-29-11-2025-6_45_15-pm" src="https://github.com/user-attachments/assets/a0f8ab9c-d1e4-4940-a4b1-8a911c0abcce" />
 
 ## 📌 Architecture Overview
 
 High-Level Flow
 
 - User requests an image with transformation parameters /image.png?format=jpeg&height=200&width=200&quality=70
-- CloudFront Function rewrites the URL → points to cached transformed image path
-- If transformed version exists → CloudFront returns it instantly
+- CloudFront Function rewrites the URL → points to the cached transformed image path
+- If a transformed version exists → CloudFront returns it instantly
 - If not → request forwarded to Lambda
-- Lambda fetches raw image from S3, transforms it, stores it in transformed bucket
-- CloudFront caches and returns transformed image
+- Lambda fetches the raw image from S3, transforms it, and stores it in the transformed bucket
+- CloudFront caches and returns the transformed image
 
 ## 🚀 Features
 
 - Format conversion → PNG, JPEG, WebP
 - Resize → width × height
-- Quality optimization
+- Quality optimisation
 - Automatic caching using S3 + CloudFront
 - Pay-as-you-go serverless infrastructure
 - Fully provisioned using Terraform
@@ -39,11 +41,11 @@ High-Level Flow
 ### 🏗️ Terraform Setup
 
 ```bash
-# Goto the directory and download the sharp module
+# Go to the directory and download the sharp module
 cd module/lambda/sharp && \
 npm install sharp --cpu=x64 --os=linux --libc=glibc
 
-# Initialize Terraform
+# Initialise Terraform
 terraform init
 # Validate configuration
 terraform validate
@@ -65,8 +67,8 @@ Terraform creates two buckets:
 
 Bucket Name Purpose
 
-- raw-image-bucket Stores original / unmodified images
-- transformed-image-bucket Stores processed/resized/optimized images
+- raw-image-bucket Stores original/unmodified images
+- transformed-image-bucket Stores processed/resized/optimised images
 
 ### λ Lambda Function
 
@@ -81,12 +83,12 @@ The Lambda function uses Sharp to process transformations from query parameters:
 - Example Transform Request
 - https://<cloudfront-url>/image.png?format=jpeg&width=200&height=200&quality=70
 
-### 🌐 CloudFront Behavior
+### 🌐 CloudFront Behaviour
 
 CloudFront handles:
 
 - URL rewrite using CloudFront Functions
-- Checking transformed bucket before invoking Lambda
+- Checking the transformed bucket before invoking Lambda
 - Global caching for ultra-fast delivery
 
 ### 🧪 Testing the Service
