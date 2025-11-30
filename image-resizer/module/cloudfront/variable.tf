@@ -2,7 +2,7 @@ variable "s3_domain_name" {
   type = string
 }
 
-variable "lambda_edge_arn" {
+variable "cloudfront_name" {
   type = string
 }
 

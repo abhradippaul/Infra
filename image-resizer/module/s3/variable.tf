@@ -9,4 +9,3 @@ variable "cloudfront_arn" {
 variable "bucket_name" {
   type = string
 }
-

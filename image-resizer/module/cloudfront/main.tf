@@ -125,7 +125,7 @@ resource "aws_cloudfront_distribution" "distribution" {
   }
 
   tags = {
-    "Name" = "s3_cloudfront"
+    "Name" = var.cloudfront_name
   }
 }
 

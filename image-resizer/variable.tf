@@ -12,4 +12,3 @@ variable "transformed_bucket_name" {
   type    = string
   default = "abhradippaul-image-resizer-transformed-bucket"
 }
-

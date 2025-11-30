@@ -18,7 +18,7 @@ resource "aws_iam_role" "lambda" {
   assume_role_policy = data.aws_iam_policy_document.lambda_assume_role.json
 }
 
-data "aws_iam_policy_document" "lambda_permissions" {
+data "aws_iam_policy_document" "lambda_permissions_document" {
   statement {
     effect = "Allow"
     actions = [
@@ -39,7 +39,7 @@ data "aws_iam_policy_document" "lambda_permissions" {
 resource "aws_iam_role_policy" "lambda_permissions" {
   name   = "lambda-policy"
   role   = aws_iam_role.lambda.id
-  policy = data.aws_iam_policy_document.lambda_permissions.json
+  policy = data.aws_iam_policy_document.lambda_permissions_document.json
 }
 
 resource "aws_iam_role_policy_attachment" "lambda_basic" {

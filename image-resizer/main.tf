@@ -16,8 +16,8 @@ module "cloudfront" {
   source              = "./module/cloudfront"
   s3_domain_name      = module.transformed_bucket.bucket_domain_name
   price_class         = "PriceClass_100"
-  lambda_edge_arn     = module.lambda.lambda_edge_arn
   lambda_function_url = module.lambda.lambda_function_url
+  cloudfront_name     = "Image Transform"
 }
 
 module "lambda" {
